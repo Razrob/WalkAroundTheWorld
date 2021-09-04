@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f0957c8c66885d468b0422f16e8fc55, type: 3}
+  m_Name: map_04
+  m_EditorClassIdentifier: 
+  _heightsBlocks:
+    Blocks:
+    - Block: {fileID: 904990768, guid: c0b48fd73b4e6654c8f8d659cf318959, type: 3}
+      Height: 0.4
+    - Block: {fileID: 2145019540, guid: 46dc8161d4ed1da4f8a76c95bbeb3046, type: 3}
+      Height: 1
+  _noiseProperties:
+    OctaveNumber: 6
+    Frequency: 7
+    FrequencyMultiplier: 2
+    Amplitude: 1
+    AmplitudeMultiplier: 0.5
+    ClampingType: 1
+  _verticalScale: 25
+  _waterLevel: 0.4
+  _mapImage: {fileID: 21300000, guid: d956f5a176889474ab7b794478a6b49b, type: 3}
+  _mapPrice: 1750
