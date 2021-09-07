@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class AchievementsDisplay : MonoBehaviour
 {
@@ -12,8 +13,9 @@ public class AchievementsDisplay : MonoBehaviour
 
     [SerializeField] private Achievement[] _achievements;
 
-     private List<AchievementUI> _achievementUIs = new List<AchievementUI>();
+    private List<AchievementUI> _achievementUIs = new List<AchievementUI>();
 
+    public static event Action OnRewardTaken;
 
     private void Start()
     {
@@ -52,5 +54,6 @@ public class AchievementsDisplay : MonoBehaviour
     {
         _achievements[_achievementIndex].TakeReward();
         UpdateAchievementUI(_achievementUIs[_achievementIndex], _achievementIndex);
+        OnRewardTaken?.Invoke();
     }
 }

@@ -10,7 +10,7 @@ public class Achievement : ScriptableObject
     [SerializeField] public AchievementCondition _achievementCondition;
     [SerializeField] public AchievementReward _achievementReward;
 
-    [SerializeField] public bool _rewardIsReceived;
+    public bool RewardIsReceived;
 
     public string AchievementInfo => _achievementInfo;
     public int TargetValue => _achievementCondition.TargetValue;
@@ -20,14 +20,13 @@ public class Achievement : ScriptableObject
     public Sprite RewardSprite => _achievementReward.RewardSprite;
 
 
-    public bool RewardIsReceived => _rewardIsReceived;
 
     public bool CheckComplete() => _achievementCondition.CheckComplete();
     public float GetProgress() => _achievementCondition.GetProgress();
 
     public void TakeReward()
     {
-        _rewardIsReceived = true;
+        RewardIsReceived = true;
         _achievementReward.TakeReward();
     }
     

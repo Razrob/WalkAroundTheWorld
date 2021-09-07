@@ -27,7 +27,7 @@ public class TreeSpawner : MonoBehaviour
             if(_treeGrid.TreeSpawnAvailable(_position, _trees[_treeIndex].Radius))
             {
                 Vector3 _pos = new Vector3(_position.x, _tileGrid.GetCell(_position).Y, _position.y).TransformFromCustomCoordinate();
-                _treeGrid.AddTree(_position, Instantiate(_trees[_treeIndex], _pos + Vector3.back * 1.005f, Quaternion.identity));
+                _treeGrid.AddTree(_position, Instantiate(_trees[_treeIndex], _pos + Vector3.back * 0.05f, Quaternion.identity));
                 _tileGrid.AddTreeToCell(_position);
             }
         }

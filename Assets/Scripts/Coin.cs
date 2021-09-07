@@ -13,7 +13,7 @@ public class Coin : MonoBehaviour, ICollectable, ISpawnable
 
     public void Collect()
     {
-        CoinWallet.Balance += _denomination;
+        CoinWallet.SetBalance(CoinWallet.Balance + _denomination);
         Destroy();
     }
 

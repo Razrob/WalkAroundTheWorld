@@ -12,6 +12,6 @@ public class RewardCoins : AchievementReward
     public override Sprite RewardSprite => _sprite;
 
 
-    public override void TakeReward() => CoinWallet.Balance += _coinCount;
+    public override void TakeReward() => CoinWallet.SetBalance(CoinWallet.Balance + _coinCount);
     
 }

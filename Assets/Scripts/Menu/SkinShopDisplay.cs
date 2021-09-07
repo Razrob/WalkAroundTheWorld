@@ -8,20 +8,21 @@ public class SkinShopDisplay : PageShopDisplay
 
     private void OnEnable()
     {
-        SetSelectedMap(0);
+        Init();
+        SetSelectedItem(0);
     }
 
-    protected override void Init()
+    private void Init()
     {
         _items = _skinItems;
     }
 
     protected override void SelectItem()
     {
-        AvailabilitySkins.Selectedskin = _skinItems[_selectedItemIndex];
+        AvailabilitySkins.SetSelectedSkin(_skinItems[_selectedItemIndex]);
         UpdateItemDisplay();
     }
-    protected override bool ItemIsSelect() => _skinItems[_selectedItemIndex] == AvailabilitySkins.Selectedskin;
+    protected override bool ItemIsSelect() => _skinItems[_selectedItemIndex] == AvailabilitySkins.SelectedSkin;
 
     protected override bool CheckPurchased()
     {
@@ -29,7 +30,7 @@ public class SkinShopDisplay : PageShopDisplay
         return false;
     }
 
-    public override void BuySelectedMap()
+    public override void BuySelectedItem()
     {
         if (CoinWallet.TryMakePurchase(_skinItems[_selectedItemIndex].ItemPrice))
         {

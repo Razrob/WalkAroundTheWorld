@@ -16,6 +16,7 @@ public class MapProperties : ScriptableObject, IShopItem
     [Header("For shop")]
     [SerializeField] public Sprite _mapImage;
     [SerializeField] public int _mapPrice;
+    [SerializeField] public string _mapName;
 
     public HeightsBlocks HeightsBlocks => _heightsBlocks;
     public NoiseProperties NoiseProperties => _noiseProperties;
@@ -24,5 +25,6 @@ public class MapProperties : ScriptableObject, IShopItem
 
     public Sprite ItemImage => _mapImage;
     public int ItemPrice => _mapPrice;
+    public string ItemName => _mapName;
 
 }

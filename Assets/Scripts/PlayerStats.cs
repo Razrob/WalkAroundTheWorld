@@ -22,15 +22,22 @@ public class PlayerStats
 
 
 
-    public static int Steps { get; private set; }
+    public static int Steps { get; set; }
 
 
     public static event Action<float> OnHealthChanged;
     public static event Action OnHealthIsZero;
+
+    public static event Action<float> OnStepsChanged;
+
     public static float GetFloatHealth() => _health * 1f / MaxHealth;
 
 
-    public static void MakeStep() => Steps++;
+    public static void MakeStep()
+    {
+        Steps++;
+        OnStepsChanged?.Invoke(Steps);
+    }
 
 
 

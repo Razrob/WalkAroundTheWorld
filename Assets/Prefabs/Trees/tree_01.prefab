@@ -96,8 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6cb973ece7350448be03e73ccfe2d2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _radius: 2
-  _spawnChance: 0.01
+  _radius: 4
+  _spawnChance: 0.075
 --- !u!1001 &603644209937897348
 PrefabInstance:
   m_ObjectHideFlags: 0

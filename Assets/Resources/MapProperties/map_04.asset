@@ -29,3 +29,4 @@ MonoBehaviour:
   _waterLevel: 0.4
   _mapImage: {fileID: 21300000, guid: d956f5a176889474ab7b794478a6b49b, type: 3}
   _mapPrice: 1750
+  _mapName: "\u041F\u0435\u0441\u0447\u0430\u043D\u044B\u0439 \u043F\u043B\u044F\u0436"

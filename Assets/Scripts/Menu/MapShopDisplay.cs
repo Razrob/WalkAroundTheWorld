@@ -9,32 +9,44 @@ public class MapShopDisplay : PageShopDisplay
 {
     [SerializeField] private MapProperties[] _mapItems;
 
+    private void Awake()
+    {
+        Init();
+    }
 
     private void OnEnable()
     {
-        SetSelectedMap(0);
+        SetSelectedItem(0);
     }
 
     protected override void SelectItem()
     {
-        AvailabilityMapProperties.SelectedMap = _mapItems[_selectedItemIndex];
+        if (_selectedItemIndex < _mapItems.Length) AvailabilityMapProperties.SetSelectedMap(_mapItems[_selectedItemIndex]);
+        else AvailabilityMapProperties.SetSelectedMap(AvailabilityMapProperties.GetCustomMapProperties(_selectedItemIndex - _mapItems.Length));
         UpdateItemDisplay();
     }
 
-    protected override bool ItemIsSelect() => _mapItems[_selectedItemIndex] == AvailabilityMapProperties.SelectedMap;
-
-    protected override void Init()
+    protected override bool ItemIsSelect()
     {
-        _items = _mapItems;
+        if (_selectedItemIndex < _mapItems.Length) return _mapItems[_selectedItemIndex] == AvailabilityMapProperties.SelectedMap;
+        else return AvailabilityMapProperties.GetCustomMapProperties(_selectedItemIndex - _mapItems.Length) == AvailabilityMapProperties.SelectedMap;
+    }
+
+    protected void Init()
+    {
+        _items = new IShopItem[_mapItems.Length + AvailabilityMapProperties.CustomMapCount];
+        for (int i = 0; i < _mapItems.Length; i++) _items[i] = _mapItems[i];
+        for (int i = 0; i < AvailabilityMapProperties.CustomMapCount; i++) _items[_mapItems.Length + i] = AvailabilityMapProperties.GetCustomMapProperties(i);
     }
 
     protected override bool CheckPurchased()
     {
+        if (_selectedItemIndex >= _mapItems.Length) return true;
         for (int i = 0; i < AvailabilityMapProperties.MapCount; i++) if (AvailabilityMapProperties.GetMapProperties(i) == _mapItems[_selectedItemIndex]) return true;
         return false;
     }
 
-    public override void BuySelectedMap()
+    public override void BuySelectedItem()
     {
         if (CoinWallet.TryMakePurchase(_mapItems[_selectedItemIndex].ItemPrice))
         {

@@ -13,16 +13,10 @@ public abstract class PageShopDisplay : MonoBehaviour
 
     protected int _selectedItemIndex;
 
-    private void Awake()
-    {
-        Init();
-    }
-
     protected abstract bool ItemIsSelect();
     protected abstract void SelectItem();
-    protected abstract void Init();
     protected abstract bool CheckPurchased();
-    public abstract void BuySelectedMap();
+    public abstract void BuySelectedItem();
 
     
 
@@ -34,6 +28,7 @@ public abstract class PageShopDisplay : MonoBehaviour
         bool _isPurchased = CheckPurchased();
         _mapUI.ItemImage.sprite = _items[_selectedItemIndex].ItemImage;
         _mapUI.ItemPrice.text = _items[_selectedItemIndex].ItemPrice.ToString();
+        _mapUI.ItemName.text = _items[_selectedItemIndex].ItemName;
         _mapUI.BuyButton.interactable = true;
         if (_isPurchased)
         {
@@ -54,20 +49,20 @@ public abstract class PageShopDisplay : MonoBehaviour
         {
             _mapUI.BuyButtonText.text = "Купить";
             Button.ButtonClickedEvent _clickedEvent = new Button.ButtonClickedEvent();
-            _clickedEvent.AddListener(BuySelectedMap);
+            _clickedEvent.AddListener(BuySelectedItem);
             _mapUI.BuyButton.onClick = _clickedEvent;
         }
 
         _mapUI.DarkPanel.SetActive(!_isPurchased);
     }
 
-    public void SetSelectedMap(int _index)
+    public void SetSelectedItem(int _index)
     {
         _selectedItemIndex = 0;
         UpdateItemDisplay();
     }
 
-    public void ChangeMap(int _indexOffcet)
+    public void ChangeItem(int _indexOffcet)
     {
         if (_selectedItemIndex + _indexOffcet < 0 || _selectedItemIndex + _indexOffcet >= _items.Length) return;
 
@@ -84,6 +79,7 @@ public abstract class PageShopDisplay : MonoBehaviour
     {
         public Image ItemImage;
         public TextMeshProUGUI ItemPrice;
+        public TextMeshProUGUI ItemName;
         public TextMeshProUGUI BuyButtonText;
         public Button BuyButton;
         public GameObject DarkPanel;

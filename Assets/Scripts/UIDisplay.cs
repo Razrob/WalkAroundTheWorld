@@ -20,14 +20,14 @@ public class UIDisplay : MonoBehaviour
         CoinWallet.OnBalanceChanged += UpdateBalanceDisplay;
         PlayerStats.OnHealthChanged += UpdateHealthDisplay;
 
-        PlayerStats.MaxHealth = AvailabilitySkins.Selectedskin.MaxHealth;
-        PlayerStats.Health = AvailabilitySkins.Selectedskin.MaxHealth;
+        PlayerStats.MaxHealth = AvailabilitySkins.SelectedSkin.MaxHealth;
+        PlayerStats.Health = AvailabilitySkins.SelectedSkin.MaxHealth;
 
         UpdateBalanceDisplay(CoinWallet.Balance);
         UpdateHealthDisplay(PlayerStats.GetFloatHealth());
 
 
-        _playerPhoto.sprite = AvailabilitySkins.Selectedskin.ItemImage;
+        _playerPhoto.sprite = AvailabilitySkins.SelectedSkin.ItemImage;
 
 
     }

@@ -7,4 +7,5 @@ public interface IShopItem
 {
     public Sprite ItemImage { get; }
     public int ItemPrice { get; }
+    public string ItemName { get; }
 }

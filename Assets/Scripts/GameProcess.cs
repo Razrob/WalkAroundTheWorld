@@ -17,7 +17,7 @@ public class GameProcess : MonoBehaviour
 
         Time.timeScale = 1;
         PlayerStats.OnHealthIsZero += FinishGame;
-        Instantiate(AvailabilitySkins.Selectedskin.PlayerSkin, Vector3.zero, AvailabilitySkins.Selectedskin.PlayerSkin.transform.rotation);
+        Instantiate(AvailabilitySkins.SelectedSkin.PlayerSkin, Vector3.zero, AvailabilitySkins.SelectedSkin.PlayerSkin.transform.rotation);
     }
 
 

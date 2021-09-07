@@ -16,3 +16,4 @@ MonoBehaviour:
   _maxHealth: 100
   _skinImage: {fileID: 21300000, guid: 6a1623eb4e48a954d9926f6c49872d77, type: 3}
   _skinPrice: 1000
+  _skinName: "\u041A\u043E\u0442"

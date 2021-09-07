@@ -5,26 +5,22 @@ using System;
 
 public class CoinWallet
 {
-    private static int _balance = 10000;
-    public static int Balance
-    {
-        get { return _balance; }
-        set 
-        { 
-            if (value > 0) _balance = value;
-            OnBalanceChanged?.Invoke(_balance);
-        }
-    }
+    public static int Balance { get; set; } = 15000;
 
     public static event Action<int> OnBalanceChanged;
 
+    public static void SetBalance(int _value)
+    {
+        Balance = _value;
+        OnBalanceChanged?.Invoke(Balance);
+    }
 
     public static bool TryMakePurchase(int _value)
     {
-        if(_balance >= _value)
+        if(Balance >= _value)
         {
-            _balance -= _value;
-            OnBalanceChanged?.Invoke(_balance);
+            Balance -= _value;
+            OnBalanceChanged?.Invoke(Balance);
             return true;
         }
         return false;

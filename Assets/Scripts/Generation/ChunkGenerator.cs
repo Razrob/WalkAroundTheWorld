@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.IO;
 
 public class ChunkGenerator : MonoBehaviour
 {
@@ -29,10 +30,6 @@ public class ChunkGenerator : MonoBehaviour
 
     private void Awake()
     {
-        //temp
-       // _mapProperties = _tempMapProperties;
-        //end temp
-
          _seed = UnityEngine.Random.Range(0, 900000000);
 
         _noiseGenerator = new NoiseGenerator(_mapProperties.NoiseProperties);
@@ -43,13 +40,13 @@ public class ChunkGenerator : MonoBehaviour
         System.Random _random = new System.Random(_seed);
 
         bool _isCorrect = false;
-        do
+        for (int i = 0; i < 1000; i++)
         {
+            if (_isCorrect) break;
             _globalOffcet = new Vector2Int(_random.Next(-10000000, 10000000), _random.Next(-10000000, 1000000));
             TerrainHeights _heights = _noiseGenerator.GetTerrainHeights(1, 1, Vector2.zero + _globalOffcet);
-            if (_heights[0, 0] > _waterLevel) _isCorrect = true;
+            if (GetBlockFromHeight(_heights[0, 0]).GetComponent<TileProperties>().IsHardSurface) _isCorrect = true;
         }
-        while (!_isCorrect);
 
         UpdateChunks(Vector3.zero);
 

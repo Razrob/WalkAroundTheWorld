@@ -12,6 +12,7 @@ public class Skin : ScriptableObject, IShopItem
     [Header("For shop")]
     [SerializeField] private Sprite _skinImage;
     [SerializeField] private int _skinPrice;
+    [SerializeField] public string _skinName;
 
     public GameObject PlayerSkin => _playerSkin;
     public int MaxHealth => _maxHealth;
@@ -19,4 +20,5 @@ public class Skin : ScriptableObject, IShopItem
 
     public Sprite ItemImage => _skinImage;
     public int ItemPrice => _skinPrice;
+    public string ItemName => _skinName;
 }
