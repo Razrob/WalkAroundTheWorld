@@ -69,7 +69,7 @@ public class TileGrid : MonoBehaviour
     public TileProperties GetTileProperties(Vector3 _position)
     {
         Vector2Int _playerPosition = new Vector2(_position.x, _position.z).TransformToCustomCoordinate();
-        if (_tileCells[_playerPosition] != null) return _tileCells[_playerPosition].TileProperties;
+        if (_tileCells.ContainsKey(_playerPosition)) return _tileCells[_playerPosition].TileProperties;
         return null;
     }
     public ICollectable TryGetItem(Vector3 _position)

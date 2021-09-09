@@ -27,7 +27,7 @@ public class CreatedMapsDisplay : MonoBehaviour
         _mapImage.SetActive(_mapAvailable);
 
         if (!_mapAvailable) _mapName.text = "Созданные карты отсутствуют";
-        else _mapName.text = AvailabilityMapProperties.GetCustomMapProperties(_activeMapIndex)._mapName;
+        else _mapName.text = AvailabilityMapProperties.GetCustomMapProperties(_activeMapIndex).ItemName;
 
         _editButton.interactable = _mapAvailable;
         _deleteButton.interactable = _mapAvailable;

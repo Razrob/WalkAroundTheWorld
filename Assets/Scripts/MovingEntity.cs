@@ -7,7 +7,7 @@ public class MovingEntity : MonoBehaviour
 {
     [SerializeField] private bool _is3DModel;
     [SerializeField] private float _offcetZ;
-    [SerializeField] private float _tileUpOffcet;
+    [SerializeField] protected float _tileUpOffcet;
     [SerializeField] private float _maxJumpHeight;
     [SerializeField] protected float _jumpHeight;
     [SerializeField] protected int _jumpDistance;
@@ -18,8 +18,8 @@ public class MovingEntity : MonoBehaviour
     [SerializeField] private AnimationCurve _playerScaleCurve;
     [SerializeField] private AnimationCurve _shadowScaleCurve;
 
-    [SerializeField] protected ChunkGenerator _chunkGenerator;
-    [SerializeField] protected TileGrid _tileGrid;
+     protected ChunkGenerator _chunkGenerator;
+     protected TileGrid _tileGrid;
 
     [SerializeField] protected Transform _shadowPrefab;
     [SerializeField] protected float _shadowScale;
@@ -32,7 +32,6 @@ public class MovingEntity : MonoBehaviour
 
     private void Start()
     {
-        _startScale = transform.localScale;
 
         _jumpHeight *= _jumpDistance;
 
@@ -44,11 +43,13 @@ public class MovingEntity : MonoBehaviour
         RefreshPosition();
 
         Init();
+        _startScale = transform.localScale;
+
     }
 
     protected virtual void Init() { }
 
-    protected void RefreshPosition()
+    private void RefreshPosition()
     {
         if (!_tileGrid.CheckTileAvailability(transform.position)) return;
         Vector3 _position;

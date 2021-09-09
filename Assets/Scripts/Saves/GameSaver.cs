@@ -65,9 +65,12 @@ public class GameSaver
             List<MapProperties> _maps = new List<MapProperties>();
             for (int i = 0; i < _mapPropertiesData.MapPropertiesFileNames.Count; i++) _maps.Add(Resources.Load<MapProperties>($"{_mapPropertiesResourcesPath}{_mapPropertiesData.MapPropertiesFileNames[i]}"));
             AvailabilityMapProperties.MapProperties = _maps;
-            MapProperties _mapProperties = Resources.Load<MapProperties>($"{_mapPropertiesResourcesPath}{_mapPropertiesData.SelectedMapPropertiesName}");
-            if(_mapProperties != null) AvailabilityMapProperties.SelectedMap = _mapProperties;
 
+            if (_mapPropertiesData.SelectedMapPropertiesName != null)
+            {
+                MapProperties _mapProperties = Resources.Load<MapProperties>($"{_mapPropertiesResourcesPath}{_mapPropertiesData.SelectedMapPropertiesName}");
+                if (_mapProperties != null) AvailabilityMapProperties.SelectedMap = _mapProperties;
+            }
         }
     }
 
@@ -85,7 +88,7 @@ public class GameSaver
             for(int i = 0; i < _customMapPropertiesData.CustomMapProperetiesData.Length; i++)
             {
                 CustomMapProperties _customMap = ScriptableObject.CreateInstance<CustomMapProperties>();
-                _customMap.SetNoiseProperties = _customMapPropertiesData.CustomMapProperetiesData[i].NoiseProperties;
+                _customMap.CustomNoiseProperties = _customMapPropertiesData.CustomMapProperetiesData[i].NoiseProperties;
 
                 HeightsBlocks _heightsBlocks = new HeightsBlocks();
                 _heightsBlocks.Blocks = new HeightsBlocks.HeightBlock[_customMapPropertiesData.CustomMapProperetiesData[i].HeightsBlocksData.Blocks.Length];
@@ -94,17 +97,30 @@ public class GameSaver
                     _heightsBlocks.Blocks[x].Block = Resources.Load<GameObject>($"{_customMapPropertiesTileResourcesPath}{_customMapPropertiesData.CustomMapProperetiesData[i].HeightsBlocksData.Blocks[x].Item1}");
                     _heightsBlocks.Blocks[x].Height = _customMapPropertiesData.CustomMapProperetiesData[i].HeightsBlocksData.Blocks[x].Item2;
                 }
-                _customMap.SetHeightsBlocks = _heightsBlocks;
+                _customMap.CustomHeightsBlocks = _heightsBlocks;
 
-                _customMap.SetVerticalScale = _customMapPropertiesData.CustomMapProperetiesData[i].VerticalScale;
-                _customMap.SetWaterLevel = _customMapPropertiesData.CustomMapProperetiesData[i].WaterLevel;
+                _customMap.CustomVerticalScale = _customMapPropertiesData.CustomMapProperetiesData[i].VerticalScale;
+                _customMap.CustomWaterLevel = _customMapPropertiesData.CustomMapProperetiesData[i].WaterLevel;
 
-                _customMap.SetName = _customMapPropertiesData.CustomMapProperetiesData[i].MapName;
-                _customMap.SetSprite = Resources.Load<Sprite>($"{_customMapPropertiesSpriteResourcesPath}{_customMapPropertiesData.CustomMapProperetiesData[i].SpriteName}");
+                _customMap._mapName = _customMapPropertiesData.CustomMapProperetiesData[i].MapName;
+                _customMap.CustomSprite = Resources.Load<Sprite>($"{_customMapPropertiesSpriteResourcesPath}{_customMapPropertiesData.CustomMapProperetiesData[i].SpriteName}");
 
                 _customMaps.Add(_customMap);
 
             }
+
+            if(_customMapPropertiesData.SelectedMapName != null)
+            {
+                foreach (CustomMapProperties _customMap in _customMaps)
+                {
+                    if (_customMap.ItemName == _customMapPropertiesData.SelectedMapName)
+                    {
+                        AvailabilityMapProperties.SelectedMap = _customMap;
+                        break;
+                    }
+                }
+            }
+
             AvailabilityMapProperties.CustomMapProperties = _customMaps;
 
         }
@@ -112,7 +128,6 @@ public class GameSaver
 
     private static void LoadCompletedAchievements()
     {
-
         if (!File.Exists(_achievementsDataPath)) return;
 
         using (FileStream _fileStream = File.Open(_achievementsDataPath, FileMode.Open))
@@ -122,7 +137,10 @@ public class GameSaver
 
             for(int i = 0; i < _achievements.Length; i++)
             {
-                _achievements[i].RewardIsReceived = _savableCompletedAchievements.SavableAchievements[i].IsComplete;
+                for (int x = 0; x < _savableCompletedAchievements.SavableAchievements.Length; x++)
+                {
+                    if (_savableCompletedAchievements.SavableAchievements[x].AchievementName == _achievements[i].name) _achievements[i].RewardIsReceived = _savableCompletedAchievements.SavableAchievements[i].IsComplete;
+                }
             }
 
         }
@@ -165,7 +183,8 @@ public class GameSaver
             SavableMapPropertiesData _mapPropertiesData = new SavableMapPropertiesData();
 
             foreach (MapProperties _map in AvailabilityMapProperties.MapProperties) _mapPropertiesData.MapPropertiesFileNames.Add(_map.name);
-            _mapPropertiesData.SelectedMapPropertiesName = AvailabilityMapProperties.SelectedMap.name;
+            if(!AvailabilityMapProperties.SelectedMapIsCustom()) _mapPropertiesData.SelectedMapPropertiesName = AvailabilityMapProperties.SelectedMap.name;
+            else _mapPropertiesData.SelectedMapPropertiesName = null;
 
             _binaryFormatter.Serialize(_fileStream, _mapPropertiesData);
         }
@@ -182,6 +201,7 @@ public class GameSaver
             for(int i = 0; i < AvailabilityMapProperties.CustomMapCount; i++)
             {
                 CustomMapProperties _customMap = AvailabilityMapProperties.GetCustomMapProperties(i);
+
                 _customMapPropertiesData.CustomMapProperetiesData[i] = new SavableCustomMapPropertiesData.MapData();
                 _customMapPropertiesData.CustomMapProperetiesData[i].NoiseProperties = _customMap.NoiseProperties;
 
@@ -194,6 +214,9 @@ public class GameSaver
 
                 _customMapPropertiesData.CustomMapProperetiesData[i].SpriteName = _customMap.ItemImage.name;
                 _customMapPropertiesData.CustomMapProperetiesData[i].MapName = _customMap.ItemName;
+
+                if (AvailabilityMapProperties.SelectedMapIsCustom()) _customMapPropertiesData.SelectedMapName = AvailabilityMapProperties.SelectedMap.ItemName;
+                else _customMapPropertiesData.SelectedMapName = null;
             }
 
             _binaryFormatter.Serialize(_fileStream, _customMapPropertiesData);
@@ -202,6 +225,7 @@ public class GameSaver
 
     private static void SaveCompletedAchievements()
     {
+
         using (FileStream _fileStream = File.Create(_achievementsDataPath))
         {
             Achievement[] _achievements = Resources.FindObjectsOfTypeAll<Achievement>();

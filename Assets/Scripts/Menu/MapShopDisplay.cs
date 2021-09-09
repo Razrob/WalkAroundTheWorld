@@ -16,6 +16,7 @@ public class MapShopDisplay : PageShopDisplay
 
     private void OnEnable()
     {
+        Init();
         SetSelectedItem(0);
     }
 

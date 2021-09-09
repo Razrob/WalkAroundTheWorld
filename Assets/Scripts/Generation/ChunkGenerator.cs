@@ -6,8 +6,6 @@ using System.IO;
 
 public class ChunkGenerator : MonoBehaviour
 {
-    [SerializeField] private MapProperties _tempMapProperties;
-
     [SerializeField] private TileGrid _tileGrid;
 
     [SerializeField] private int _chunkNumber;
@@ -26,7 +24,8 @@ public class ChunkGenerator : MonoBehaviour
     private Vector2Int _lastMinChunkPosition;
     private Vector2Int _globalOffcet;
 
-    
+    private int _finishedCorutines = 0;
+    public bool ChunkUpdateCompleted { get { return _finishedCorutines >= 2; } }
 
     private void Awake()
     {
@@ -51,9 +50,15 @@ public class ChunkGenerator : MonoBehaviour
         UpdateChunks(Vector3.zero);
 
     }
-    private void DestroyUnusedChunks(Vector2Int _minChunkPosition)
+    private IEnumerator DestroyUnusedChunks(Vector2Int _minChunkPosition)
     {
-        if (_minChunkPosition == _lastMinChunkPosition) return;
+        if (_minChunkPosition == _lastMinChunkPosition)
+        {
+            _finishedCorutines++;
+            yield break;
+        }
+
+
         Vector2Int _offcet = _lastMinChunkPosition - _minChunkPosition;
         _offcet *= _chunkNumber + 1;
 
@@ -75,19 +80,27 @@ public class ChunkGenerator : MonoBehaviour
             _xLength = _minPosition.x + _chunkSize * (_chunkNumber * 2 + 1);
         }
 
+        int _iterationCounter = 0;
         for (int z = _minPosition.y; z < _zLength; z++)
         {
             for (int x = _minPosition.x; x < _xLength; x++)
             {
                 if (!_tileGrid.CellIsExists(new Vector2Int(x, z))) continue;
                 TileCell _cell = _tileGrid.GetCell(new Vector2Int(x, z));
-                Destroy(_cell.TileProperties.gameObject);
+
+                 Destroy(_cell.TileProperties.gameObject);
+
                 _cell._item?.Destroy();
                 _tileGrid.RemoveCell(new Vector2Int(x, z));
+
+                if (_iterationCounter % ((_chunkNumber * 2 + 1) * _chunkSize) / 6 == 0) yield return null;
+                
+                _iterationCounter++;
             }
         }
 
         _lastMinChunkPosition = _minChunkPosition;
+        _finishedCorutines++;
     }
 
     private Vector2Int[] GetRequiredChunksPositions(Vector2Int _minChunkPosition)
@@ -105,6 +118,7 @@ public class ChunkGenerator : MonoBehaviour
         }
         return _requiredChunksPositions;
     }
+
     private GameObject GetBlockFromHeight(float _height)
     {
         GameObject _block = _heightsBlocks.Blocks[0].Block;
@@ -117,32 +131,16 @@ public class ChunkGenerator : MonoBehaviour
         return _block;
     }
 
-    public void UpdateChunks(Vector3 _position)
+    private IEnumerator CreateChunks(Vector2Int[] _requiredChunksPositions)
     {
+        int _iterationCounter = 0;
 
-        Vector2Int _playerPosition = new Vector2(_position.x, _position.z).TransformToCustomCoordinate();
-
-        Vector2Int _minChunkPosition = new Vector2Int();
-
-
-        if (_playerPosition.x >= 0) _minChunkPosition.x = _playerPosition.x - Math.Abs(_playerPosition.x % _chunkSize);
-        else if (_playerPosition.x % _chunkSize == 0) _minChunkPosition.x = _playerPosition.x;
-        else _minChunkPosition.x = _playerPosition.x - (_chunkSize + _playerPosition.x % _chunkSize);
-
-        if (_playerPosition.y >= 0) _minChunkPosition.y = _playerPosition.y - Math.Abs(_playerPosition.y % _chunkSize);
-        else if (_playerPosition.y % _chunkSize == 0) _minChunkPosition.y = _playerPosition.y;
-        else _minChunkPosition.y = _playerPosition.y - (_chunkSize + _playerPosition.y % _chunkSize);
-
-        DestroyUnusedChunks(_minChunkPosition);
-
-        Vector2Int[] _requiredChunksPositions = GetRequiredChunksPositions(_minChunkPosition);
-
-        for(int i = 0; i < _requiredChunksPositions.Length; i++)
+        for (int i = 0; i < _requiredChunksPositions.Length; i++)
         {
             if (_tileGrid.CellIsExists(_requiredChunksPositions[i])) continue;
             TerrainHeights _heights = _noiseGenerator.GetTerrainHeights(_chunkSize, _chunkSize, _requiredChunksPositions[i] + _globalOffcet);
 
-            for(int z = _requiredChunksPositions[i].y; z < _requiredChunksPositions[i].y + _chunkSize; z++)
+            for (int z = _requiredChunksPositions[i].y; z < _requiredChunksPositions[i].y + _chunkSize; z++)
             {
                 for (int x = _requiredChunksPositions[i].x; x < _requiredChunksPositions[i].x + _chunkSize; x++)
                 {
@@ -156,9 +154,37 @@ public class ChunkGenerator : MonoBehaviour
                     TileProperties _tileProperties = Instantiate(GetBlockFromHeight(_heights[_xIndex, _zIndex]), _tilePosition.TransformFromCustomCoordinate(), Quaternion.identity).GetComponent<TileProperties>();
 
                     _tileGrid.AddCell(new Vector2Int(x, z), new TileCell { Y = _tilePosition.y, IsExists = true, TileProperties = _tileProperties });
+                    if(_iterationCounter % ((_chunkNumber * 2 + 1) * _chunkSize) / 6 == 0)
+                    {
+                        if(_lastMinChunkPosition != Vector2Int.zero) yield return null;
+                    }
+
+                    _iterationCounter++;
                 }
             }
-
         }
+        _finishedCorutines++;
+    }
+
+    public void UpdateChunks(Vector3 _position)
+    {
+        _finishedCorutines = 0;
+
+        Vector2Int _playerPosition = new Vector2(_position.x, _position.z).TransformToCustomCoordinate();
+
+        Vector2Int _minChunkPosition = new Vector2Int();
+
+        if (_playerPosition.x >= 0) _minChunkPosition.x = _playerPosition.x - Math.Abs(_playerPosition.x % _chunkSize);
+        else if (_playerPosition.x % _chunkSize == 0) _minChunkPosition.x = _playerPosition.x;
+        else _minChunkPosition.x = _playerPosition.x - (_chunkSize + _playerPosition.x % _chunkSize);
+
+        if (_playerPosition.y >= 0) _minChunkPosition.y = _playerPosition.y - Math.Abs(_playerPosition.y % _chunkSize);
+        else if (_playerPosition.y % _chunkSize == 0) _minChunkPosition.y = _playerPosition.y;
+        else _minChunkPosition.y = _playerPosition.y - (_chunkSize + _playerPosition.y % _chunkSize);
+
+        Vector2Int[] _requiredChunksPositions = GetRequiredChunksPositions(_minChunkPosition);
+
+        StartCoroutine(DestroyUnusedChunks(_minChunkPosition));
+        StartCoroutine(CreateChunks(_requiredChunksPositions));
     }
 }

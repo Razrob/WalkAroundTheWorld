@@ -7,6 +7,7 @@ using System;
 public class SavableCustomMapPropertiesData 
 {
     public MapData[] CustomMapProperetiesData;
+    public string SelectedMapName;
 
     [Serializable]
     public class MapData

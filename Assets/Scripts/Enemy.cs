@@ -9,11 +9,21 @@ public class Enemy : MovingEntity
     [SerializeField] private int _damagePerAttack;
     [SerializeField] private float _maxDistance;
 
-    public Transform Target;
+    [HideInInspector] public Transform Target;
 
     protected override void Init()
     {
         if (_jumpsPerSecond <= 0) _jumpsPerSecond = 1;
+
+        _jumpsPerSecond = UnityEngine.Random.Range(_jumpsPerSecond - 0.5f, _jumpsPerSecond + 0.5f);
+        _damagePerAttack = UnityEngine.Random.Range(_damagePerAttack - 5, _damagePerAttack + 5);
+        _maxDistance = UnityEngine.Random.Range(_maxDistance - 5, _maxDistance + 5);
+        _jumpHeight = UnityEngine.Random.Range(_jumpHeight - 1f, _jumpHeight + 2f);
+
+        transform.localScale = Vector3.one * UnityEngine.Random.Range(0.5f, 1f);
+        _tileUpOffcet = transform.localScale.x * 2;
+        _shadowScale = 2 * transform.localScale.x;
+        _shadowOffcet = new Vector3(0, -transform.localScale.x * 2 + 0.07f, 0.025f);
 
         StartCoroutine(Move());
     }

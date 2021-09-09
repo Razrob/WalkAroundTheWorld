@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CustomMapProperties : MapProperties
 {
-    public HeightsBlocks SetHeightsBlocks { set { _heightsBlocks = value; } }
-    public NoiseProperties SetNoiseProperties { set { _noiseProperties = value; } }
-    public float SetVerticalScale { set { _verticalScale = value; } }
-    public float SetWaterLevel { set { _waterLevel = value; } }
-    public string SetName { set { _mapName = value; } }
-    public Sprite SetSprite { set { _mapImage = value; } }
+    public HeightsBlocks CustomHeightsBlocks { set { _heightsBlocks = value; } }
+    public NoiseProperties CustomNoiseProperties { set { _noiseProperties = value; } }
+    public float CustomVerticalScale { set { _verticalScale = value; } }
+    public float CustomWaterLevel { set { _waterLevel = value; } }
+    public string CustomName { set { _mapName = value; } }
+    public Sprite CustomSprite { set { _mapImage = value; } }
 
 }

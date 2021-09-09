@@ -54,6 +54,13 @@ public class AvailabilityMapProperties
     {
         SelectedMap = _mapProperties;
         OnMapPropertiesChanged?.Invoke();
+        OnCustomMapPropertiesChanged?.Invoke();
+    }
+
+    public static bool SelectedMapIsCustom()
+    {
+        foreach (CustomMapProperties _customMap in CustomMapProperties) if (_customMap.ItemName == SelectedMap.ItemName) return true;
+        return false;
     }
 
 }

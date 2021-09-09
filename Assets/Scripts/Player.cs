@@ -5,28 +5,42 @@ using System;
 
 public class Player : MovingEntity
 {
+
+    private FloatingJoystick _joystick;
+
     protected override void Init()
     {
+        _joystick = FindObjectOfType<FloatingJoystick>();
         StartCoroutine(TakeEffects());
     }
 
     private void Update()
     {
-        if (!_jumping) Move();
+        if (_chunkGenerator.ChunkUpdateCompleted && !_jumping && GetMoveDirection() != Vector3.zero) Move();
     }
 
     private void Move()
     {
-        Vector2Int _move = new Vector2Int();
-        if (Input.GetAxisRaw("Horizontal") != 0) _move.x = (int)Input.GetAxisRaw("Horizontal");
-        else if (Input.GetAxisRaw("Vertical") != 0) _move.y = (int)Input.GetAxisRaw("Vertical");
-        else return;
-
         Action _onMoved = () => _chunkGenerator.UpdateChunks(transform.position);
         _onMoved += TakeItem;
 
         PlayerStats.MakeStep();
-        StartCoroutine(SmoothMove(new Vector3(_move.x, 0, _move.y).TransformFromCustomCoordinate(), _onMoved)); 
+        StartCoroutine(SmoothMove(GetMoveDirection().TransformFromCustomCoordinate(), _onMoved));
+    }
+
+    private Vector3 GetMoveDirection()
+    {
+        Vector2Int _direction = new Vector2Int(Convert.ToInt32(_joystick.Horizontal * 3f), Convert.ToInt32(_joystick.Vertical * 3f));
+        _direction = _direction.Normalize();
+
+        if (_direction.x != 0 && _direction.y != 0)
+        {
+            if (_direction.x == _direction.y) _direction = new Vector2Int(_direction.x, 0);
+            else _direction = new Vector2Int(0, _direction.y);
+        }
+        else _direction = Vector2Int.zero;
+        return new Vector3(_direction.x, 0, _direction.y);
+
     }
 
     private void ReadTileProperties(TileProperties _tileProperties)

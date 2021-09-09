@@ -128,7 +128,7 @@ public class MapCreator : MonoBehaviour
         _verticalScale = _customMap._verticalScale;
         _waterLevel = _customMap._waterLevel;
 
-        _inputField.text = _customMap._mapName;
+        _inputField.text = _customMap.ItemName;
 
         RefreshLayersDisplay();
         RefreshSlidersValues();
@@ -188,18 +188,18 @@ public class MapCreator : MonoBehaviour
         if (_editableMapIndex > -1) _customMap = AvailabilityMapProperties.GetCustomMapProperties(_editableMapIndex);
         else _customMap = ScriptableObject.CreateInstance<CustomMapProperties>();
 
-        _customMap.SetHeightsBlocks = _heightsBlocks;
-        _customMap.SetNoiseProperties = _noiseProperties;
+        _customMap.CustomHeightsBlocks = _heightsBlocks;
+        _customMap.CustomNoiseProperties = _noiseProperties;
         _customMap._verticalScale = _verticalScale;
 
         if (_waterLevelToggle.isOn) _waterLevel = _heightsBlocks.Blocks[0].Height;
         _customMap._waterLevel = _waterLevel;
 
-        _customMap.SetName = _inputField.text;
+        _customMap.CustomName = _inputField.text;
 
         if (_editableMapIndex < 0)
         {
-            _customMap.SetSprite = _defaultMapSprite;
+            _customMap.CustomSprite = _defaultMapSprite;
 
             AvailabilityMapProperties.AddCustomMapProperties(_customMap);
             _editableMapIndex = AvailabilityMapProperties.CustomMapCount - 1;
