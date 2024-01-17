@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c8c1b31631fff419212e4c98f971b9, type: 3}
   m_Name: CreatorAvailabilityCondition
   m_EditorClassIdentifier: 
-  _targetValue: 100
+  _targetValue: 500

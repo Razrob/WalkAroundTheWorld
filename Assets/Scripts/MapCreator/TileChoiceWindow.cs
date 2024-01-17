@@ -26,7 +26,6 @@ public class TileChoiceWindow : MonoBehaviour
                 gameObject.SetActive(false);
             });
         }
-        gameObject.SetActive(false);
     }
 
 }

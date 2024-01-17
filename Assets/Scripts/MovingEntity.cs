@@ -11,6 +11,7 @@ public class MovingEntity : MonoBehaviour
     [SerializeField] private float _maxJumpHeight;
     [SerializeField] protected float _jumpHeight;
     [SerializeField] protected int _jumpDistance;
+    [SerializeField] private float _jumpSpeedMupliplier = 1f;
 
     [SerializeField] private AnimationCurve _jumpCurve;
     [SerializeField] private AnimationCurve _CurveX;
@@ -97,7 +98,7 @@ public class MovingEntity : MonoBehaviour
 
                     if (_is3DModel) transform.rotation = Quaternion.RotateTowards(transform.rotation, _finalRotation, 180f / _iterationNumber);
 
-                    yield return new WaitForSeconds(0.01f / 2);
+                    yield return new WaitForSeconds(0.01f / 2 / _jumpSpeedMupliplier);
                 }
 
                 if (_is3DModel) transform.rotation = _finalRotation;

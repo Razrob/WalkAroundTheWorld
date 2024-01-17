@@ -5,7 +5,7 @@ using System;
 
 public class CoinWallet
 {
-    public static int Balance { get; set; } = 15000;
+    public static int Balance { get; set; } = 500;
 
     public static event Action<int> OnBalanceChanged;
 

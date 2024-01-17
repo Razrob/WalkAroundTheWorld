@@ -36,6 +36,7 @@ public class PlayerStats
     public static void MakeStep()
     {
         Steps++;
+        AudioStorage.Get(AudioType.Jump)?.SetAudioSourceActive(true, 0);
         OnStepsChanged?.Invoke(Steps);
     }
 

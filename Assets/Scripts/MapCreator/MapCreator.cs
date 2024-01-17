@@ -1,4 +1,4 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -54,10 +54,13 @@ public class MapCreator : MonoBehaviour
     private void UpdateLayerDisplay(MapLayerUI _mapLayer)
     {
 
-        _mapLayer.LayerName.text = $"Слой {_mapLayers.Count}";
+        _mapLayer.LayerName.text = $"РЎР»РѕР№ {_mapLayers.Count}";
         _mapLayer.LayerTile.sprite = null;
 
         int _layerIndex = _mapLayers.Count - 1;
+        _mapLayer.LayerHeight.onValueChanged.RemoveAllListeners();
+        _mapLayer.LayerSelectButton.onClick.RemoveAllListeners();
+
         _mapLayer.LayerHeight.onValueChanged.AddListener((_value) => ChangeLayerHeight(_layerIndex, _value));
         _mapLayer.LayerSelectButton.onClick.AddListener(() => SelectLayerTile(_layerIndex));
 
@@ -88,8 +91,10 @@ public class MapCreator : MonoBehaviour
 
     private bool CheckPropertiesCorrectness()
     {
-        if (_heightsBlocks.Blocks == null || _heightsBlocks.Blocks.Length < 1) _notificationDisplay.DisplayNotification("Для сохранения вы должны добавить слои", 3);
-        if (string.IsNullOrEmpty(_inputField.text)) _notificationDisplay.DisplayNotification("Для сохранения вы должны ввести название карты", 3);
+        if (_heightsBlocks.Blocks == null || _heightsBlocks.Blocks.Length < 1) 
+            _notificationDisplay.DisplayNotification("Р”РѕР±Р°РІСЊС‚Рµ СЃР»РѕРё", 3);
+        if (string.IsNullOrEmpty(_inputField.text)) 
+            _notificationDisplay.DisplayNotification("Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ РєР°СЂС‚С‹", 3);
 
         return _heightsBlocks.Blocks != null && _heightsBlocks.Blocks.Length > 0 && !string.IsNullOrEmpty(_inputField.text);
     }
@@ -188,6 +193,7 @@ public class MapCreator : MonoBehaviour
         if (_editableMapIndex > -1) _customMap = AvailabilityMapProperties.GetCustomMapProperties(_editableMapIndex);
         else _customMap = ScriptableObject.CreateInstance<CustomMapProperties>();
 
+        _heightsBlocks.Sort();
         _customMap.CustomHeightsBlocks = _heightsBlocks;
         _customMap.CustomNoiseProperties = _noiseProperties;
         _customMap._verticalScale = _verticalScale;
@@ -205,6 +211,8 @@ public class MapCreator : MonoBehaviour
             _editableMapIndex = AvailabilityMapProperties.CustomMapCount - 1;
         }
 
-        _notificationDisplay.DisplayNotification("Карта сохранена", 1.5f);
+        RefreshLayersDisplay();
+        AvailabilityMapProperties.SetSelectedMap(_customMap);
+        _notificationDisplay.DisplayNotification("РљР°СЂС‚Р° СЃРѕС…СЂР°РЅРµРЅР°", 1.5f);
     }
 }

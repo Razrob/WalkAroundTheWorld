@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-10000)]
 public class ItemSpawner : MonoBehaviour
 {
     [SerializeField] private TileGrid _tileGrid;
     [SerializeField] private GameObject[] _items;
 
-    private void Start()
+    private void Awake()
     {
         _tileGrid.OnCellAdded += SpawnItem;
     }

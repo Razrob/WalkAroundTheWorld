@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using YG;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class SceneLoader : MonoBehaviour
 
     private void Start()
     {
-        SceneManager.LoadScene(_sceneName);
+        YandexGame.DoAfterInit(() =>
+        {
+            SceneManager.LoadScene(_sceneName);
+        });
     }
-
 }

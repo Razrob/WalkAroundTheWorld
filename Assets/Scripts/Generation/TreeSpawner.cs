@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-10000)]
 public class TreeSpawner : MonoBehaviour
 {
     [SerializeField] private TileGrid _tileGrid;
@@ -10,7 +11,7 @@ public class TreeSpawner : MonoBehaviour
 
     private TreeGrid _treeGrid = new TreeGrid();
 
-    private void Start()
+    private void Awake()
     {
         _tileGrid.OnCellAdded += SpawnTree;
         _tileGrid.OnCellRemoved += RemoveTree;
@@ -18,6 +19,9 @@ public class TreeSpawner : MonoBehaviour
     
     private void SpawnTree(Vector2Int _position)
     {
+        if (_position == Vector2Int.zero) 
+            return;
+
         if (!_tileGrid.GetCell(_position).TileProperties.SuitableForTreeSpawn || _tileGrid.GetCell(_position)._item != null) return;
 
         int _treeIndex = Random.Range(0, _trees.Length);

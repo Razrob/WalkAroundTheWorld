@@ -20,6 +20,11 @@ public class MapShopDisplay : PageShopDisplay
         SetSelectedItem(0);
     }
 
+    public override RewardAdType RewardAdType()
+    {
+        return global::RewardAdType.Map;
+    }
+
     protected override void SelectItem()
     {
         if (_selectedItemIndex < _mapItems.Length) AvailabilityMapProperties.SetSelectedMap(_mapItems[_selectedItemIndex]);
@@ -47,9 +52,9 @@ public class MapShopDisplay : PageShopDisplay
         return false;
     }
 
-    public override void BuySelectedItem()
+    public override void BuySelectedItem(bool isFree)
     {
-        if (CoinWallet.TryMakePurchase(_mapItems[_selectedItemIndex].ItemPrice))
+        if (isFree || CoinWallet.TryMakePurchase(_mapItems[_selectedItemIndex].ItemPrice))
         {
             AvailabilityMapProperties.AddMapProperties(_mapItems[_selectedItemIndex]);
             SelectItem();
@@ -57,4 +62,8 @@ public class MapShopDisplay : PageShopDisplay
         }
     }
 
+    public override bool PurchaseAvailable()
+    {
+        return CoinWallet.Balance >= _mapItems[_selectedItemIndex].ItemPrice;
+    }
 }

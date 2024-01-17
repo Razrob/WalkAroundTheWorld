@@ -25,6 +25,19 @@ public class SavableCustomMapPropertiesData
     [Serializable]
     public struct HeightsBlocksData
     {
-        public (string, float)[] Blocks;
+        public StringFloatPair[] Blocks;
+    }
+}
+
+[Serializable]
+public struct StringFloatPair
+{
+    public string Value1;
+    public float Value2;
+
+    public StringFloatPair(string value1, float value2)
+    {
+        Value1 = value1;
+        Value2 = value2;
     }
 }

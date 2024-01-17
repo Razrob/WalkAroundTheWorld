@@ -30,9 +30,9 @@ public class SkinShopDisplay : PageShopDisplay
         return false;
     }
 
-    public override void BuySelectedItem()
+    public override void BuySelectedItem(bool isFree)
     {
-        if (CoinWallet.TryMakePurchase(_skinItems[_selectedItemIndex].ItemPrice))
+        if (isFree || CoinWallet.TryMakePurchase(_skinItems[_selectedItemIndex].ItemPrice))
         {
             AvailabilitySkins.AddSkin(_skinItems[_selectedItemIndex]);
             SelectItem();
@@ -40,4 +40,13 @@ public class SkinShopDisplay : PageShopDisplay
         }
     }
 
+    public override bool PurchaseAvailable()
+    {
+        return CoinWallet.Balance >= _skinItems[_selectedItemIndex].ItemPrice;
+    }
+
+    public override RewardAdType RewardAdType()
+    {
+        return global::RewardAdType.Skin;
+    }
 }

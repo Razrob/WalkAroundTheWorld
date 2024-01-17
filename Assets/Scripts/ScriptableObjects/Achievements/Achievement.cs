@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class Achievement : ScriptableObject
     [SerializeField] public AchievementCondition _achievementCondition;
     [SerializeField] public AchievementReward _achievementReward;
 
-    public bool RewardIsReceived;
+    //[field: NonSerialized] public bool RewardIsReceived { get; set; }
 
     public string AchievementInfo => _achievementInfo;
     public int TargetValue => _achievementCondition.TargetValue;
@@ -19,14 +20,14 @@ public class Achievement : ScriptableObject
     public int RewardCount => _achievementReward.RewardCount;
     public Sprite RewardSprite => _achievementReward.RewardSprite;
 
-
+    public static HashSet<string> ReceivedAchievements = new HashSet<string>();
 
     public bool CheckComplete() => _achievementCondition.CheckComplete();
     public float GetProgress() => _achievementCondition.GetProgress();
 
     public void TakeReward()
     {
-        RewardIsReceived = true;
+        ReceivedAchievements.Add(name);
         _achievementReward.TakeReward();
     }
     

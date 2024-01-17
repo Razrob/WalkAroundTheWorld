@@ -1,4 +1,4 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -26,7 +26,7 @@ public class CreatedMapsDisplay : MonoBehaviour
         bool _mapAvailable = AvailabilityMapProperties.CustomMapCount > 0;
         _mapImage.SetActive(_mapAvailable);
 
-        if (!_mapAvailable) _mapName.text = "Созданные карты отсутствуют";
+        if (!_mapAvailable) _mapName.text = "РЈ РІР°СЃ РЅРµС‚ СЃРѕР·РґР°РЅРЅС‹С… РєР°СЂС‚";
         else _mapName.text = AvailabilityMapProperties.GetCustomMapProperties(_activeMapIndex).ItemName;
 
         _editButton.interactable = _mapAvailable;

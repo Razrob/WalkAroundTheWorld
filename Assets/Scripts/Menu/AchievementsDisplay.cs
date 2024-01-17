@@ -1,8 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using System.Linq;
 
 public class AchievementsDisplay : MonoBehaviour
 {
@@ -37,15 +38,17 @@ public class AchievementsDisplay : MonoBehaviour
         _achievementUI.RewardCount.text = _achievements[_achievementIndex].RewardCount.ToString();
         _achievementUI.RewardImage.sprite = _achievements[_achievementIndex].RewardSprite;
 
-        _achievementUI.TakeButton.interactable = _achievements[_achievementIndex].CheckComplete() && !_achievements[_achievementIndex].RewardIsReceived;
+        _achievementUI.TakeButton.interactable = 
+            _achievements[_achievementIndex].CheckComplete() 
+            && !Achievement.ReceivedAchievements.Contains(_achievements[_achievementIndex].name);
 
-        bool _isReceived = _achievements[_achievementIndex].RewardIsReceived;
+        bool _isReceived = Achievement.ReceivedAchievements.Contains(_achievements[_achievementIndex].name);
         _achievementUI.DarkPanel.SetActive(_isReceived);
-        if (_isReceived) _achievementUI.TakeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Ïîëó÷åíî";
+        if (_isReceived) _achievementUI.TakeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¾";
         else
         {
             _achievementUI.TakeButton.onClick.AddListener(() => TakeReward(_achievementIndex));
-            _achievementUI.TakeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Çàáðàòü";
+            _achievementUI.TakeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Ð—Ð°Ð±Ñ€Ð°Ñ‚ÑŒ";
         }
         
     }
